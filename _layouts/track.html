@@ -1,0 +1,39 @@
+---
+layout: default
+---
+
+<article class="track">
+  <header>
+    <h1>{{ page.title }}</h1>
+
+    {% if page.duration %}
+      <p><strong>Runtime:</strong> {{ page.duration }}</p>
+    {% endif %}
+  </header>
+
+  {% assign appearances = "" | split: "" %}
+
+  {% for release in site.releases %}
+    {% for item in release.tracks %}
+      {% if item.track == page.slug %}
+        {% assign appearances = appearances | push: release %}
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
+
+  {% if appearances.size > 0 %}
+    <section>
+      <h2>Appears On</h2>
+
+      <ul>
+        {% for release in appearances %}
+          <li>
+            <a href="{{ release.url | relative_url }}">
+              {{ release.title }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% endif %}
+</article>

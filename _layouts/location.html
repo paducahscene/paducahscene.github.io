@@ -1,0 +1,60 @@
+---
+layout: default
+---
+
+<article class="location">
+  <header>
+    <h1>{{ page.name }}</h1>
+
+    {% if page.type %}
+      <p><strong>Type:</strong> {{ page.type | replace: "-", " " | capitalize }}</p>
+    {% endif %}
+
+    {% if page.city or page.state %}
+      <p>
+        <strong>Location:</strong>
+        {% if page.city %}{{ page.city }}{% endif %}{% if page.city and page.state %}, {% endif %}{% if page.state %}{{ page.state }}{% endif %}
+      </p>
+    {% endif %}
+  </header>
+
+  {% if page.operators %}
+    <section>
+      <h2>Operators</h2>
+
+      <ul>
+        {% for person_slug in page.operators %}
+          {% assign person = site.people | where: "slug", person_slug | first %}
+
+          <li>
+            {% if person %}
+              <a href="{{ person.url | relative_url }}">
+                {{ person.name }}
+              </a>
+            {% else %}
+              {{ person_slug }}
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% endif %}
+
+  {% assign recordings = site.releases | where: "recording_location", page.slug %}
+
+  {% if recordings.size > 0 %}
+    <section>
+      <h2>Recorded Here</h2>
+
+      <ul>
+        {% for release in recordings %}
+          <li>
+            <a href="{{ release.url | relative_url }}">
+              {{ release.title }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% endif %}
+</article>

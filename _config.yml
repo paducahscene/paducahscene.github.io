@@ -2,3 +2,57 @@ theme: jekyll-theme-slate
 
 title: Paducah Scene
 description:  An amateur historical archive of the Paducah, KY music community
+
+collections:
+  artists:
+    output: true
+    permalink: /artists/:name/
+
+  people:
+    output: true
+    permalink: /people/:name/
+
+  releases:
+    output: true
+    permalink: /releases/:name/
+
+  tracks:
+    output: true
+    permalink: /tracks/:name/
+
+  locations:
+    output: true
+    permalink: /locations/:name/
+
+defaults:
+  - scope:
+      path: ""
+      type: artists
+    values:
+      layout: artist
+
+  - scope:
+      path: ""
+      type: people
+    values:
+      layout: person
+
+  - scope:
+      path: ""
+      type: releases
+    values:
+      layout: release
+
+  - scope:
+      path: ""
+      type: tracks
+    values:
+      layout: track
+
+  - scope:
+      path: ""
+      type: locations
+    values:
+      layout: location
+      
+

@@ -1,0 +1,55 @@
+---
+layout: default
+---
+
+<article class="artist">
+  <header>
+    <h1>{{ page.name }}</h1>
+
+    {% if page.location %}
+      <p><strong>Location:</strong> {{ page.location }}</p>
+    {% endif %}
+  </header>
+
+  {% if page.members %}
+    <section>
+      <h2>Members</h2>
+
+      <ul>
+        {% for member in page.members %}
+          {% assign person = site.people | where: "slug", member.person | first %}
+
+          <li>
+            {% if person %}
+              <a href="{{ person.url | relative_url }}">{{ person.name }}</a>
+            {% else %}
+              {{ member.person }}
+            {% endif %}
+
+            {% if member.roles %}
+              — {{ member.roles | join: ", " }}
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% endif %}
+
+  {% assign artist_releases = site.releases | where: "artist", page.slug %}
+
+  {% if artist_releases.size > 0 %}
+    <section>
+      <h2>Releases</h2>
+
+      <ul>
+        {% for release in artist_releases %}
+          <li>
+            <a href="{{ release.url | relative_url }}">
+              {{ release.title }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% endif %}
+</article>

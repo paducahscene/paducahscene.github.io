@@ -1,0 +1,114 @@
+---
+layout: default
+---
+
+<article class="release">
+  <header>
+    <h1>{{ page.title }}</h1>
+
+    {% if page.artist %}
+      {% assign artist = site.artists | where: "slug", page.artist | first %}
+
+      {% if artist %}
+        <p>
+          <strong>Artist:</strong>
+          <a href="{{ artist.url | relative_url }}">{{ artist.name }}</a>
+        </p>
+      {% endif %}
+    {% endif %}
+
+    {% if page.recording_location %}
+      {% assign location = site.locations | where: "slug", page.recording_location | first %}
+
+      {% if location %}
+        <p>
+          <strong>Recording location:</strong>
+          <a href="{{ location.url | relative_url }}">{{ location.name }}</a>
+        </p>
+      {% endif %}
+    {% endif %}
+  </header>
+
+  {% if page.editions %}
+    <section>
+      <h2>Release Information</h2>
+
+      <ul>
+        {% for edition in page.editions %}
+          <li>
+            {{ edition.format | capitalize }}
+            {% if edition.release_date %}
+              — {{ edition.release_date }}
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% endif %}
+
+  {% if page.tracks %}
+    <section>
+      <h2>Tracks</h2>
+
+      <ol>
+        {% for item in page.tracks %}
+          {% assign track = site.tracks | where: "slug", item.track | first %}
+
+          <li>
+            {% if track %}
+              <a href="{{ track.url | relative_url }}">
+                {{ track.title }}
+              </a>
+
+              {% if track.duration %}
+                — {{ track.duration }}
+              {% endif %}
+            {% else %}
+              {{ item.track }}
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ol>
+    </section>
+  {% endif %}
+
+  {% if page.credits %}
+    <section>
+      <h2>Personnel</h2>
+
+      <ul>
+        {% for credit in page.credits %}
+          {% assign person = site.people | where: "slug", credit.person | first %}
+
+          <li>
+            {% if person %}
+              <a href="{{ person.url | relative_url }}">
+                {{ person.name }}
+              </a>
+            {% else %}
+              {{ credit.person }}
+            {% endif %}
+
+            {% if credit.credited_as %}
+              <span>(credited as {{ credit.credited_as }})</span>
+            {% endif %}
+
+            {% if credit.roles %}
+              — {{ credit.roles | join: ", " }}
+            {% endif %}
+
+            {% if credit.tracks %}
+              — tracks:
+              {% for track_slug in credit.tracks %}
+                {% assign track = site.tracks | where: "slug", track_slug | first %}
+                {% if track %}
+                  <a href="{{ track.url | relative_url }}">{{ track.title }}</a>{% unless forloop.last %}, {% endunless %}
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% endif %}
+</article>

@@ -1,0 +1,68 @@
+---
+layout: default
+---
+
+<article class="person">
+  <header>
+    <h1>{{ page.name }}</h1>
+
+    {% if page.aliases %}
+      <p>
+        <strong>Also known as:</strong>
+        {{ page.aliases | join: ", " }}
+      </p>
+    {% endif %}
+  </header>
+
+  {% assign memberships = "" | split: "" %}
+
+  {% for artist in site.artists %}
+    {% for member in artist.members %}
+      {% if member.person == page.slug %}
+        {% assign memberships = memberships | push: artist %}
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
+
+  {% if memberships.size > 0 %}
+    <section>
+      <h2>Artist Memberships</h2>
+
+      <ul>
+        {% for artist in memberships %}
+          <li>
+            <a href="{{ artist.url | relative_url }}">
+              {{ artist.name }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% endif %}
+
+  {% assign credits = "" | split: "" %}
+
+  {% for release in site.releases %}
+    {% for credit in release.credits %}
+      {% if credit.person == page.slug %}
+        {% assign credits = credits | push: release %}
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
+
+  {% if credits.size > 0 %}
+    <section>
+      <h2>Credits</h2>
+
+      <ul>
+        {% for release in credits %}
+          <li>
+            <a href="{{ release.url | relative_url }}">
+              {{ release.title }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% endif %}
+</article>
