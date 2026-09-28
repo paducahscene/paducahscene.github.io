@@ -36,7 +36,14 @@ layout: default
       <ul>
         {% for edition in page.editions %}
           <li>
-            {{ edition.format | capitalize }}
+            {% if edition.format == "cd" %}
+              CD
+            {% elsif edition.format == "digital" %}
+              Digital
+            {% else %}
+              {{ edition.format }}
+            {% endif %}
+            
             {% if edition.release_date %}
               — {{ edition.release_date }}
             {% endif %}
