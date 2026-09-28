@@ -4,10 +4,10 @@ artist: dead-nuts
 
 editions:
   - format: cd
-    release date: "2021"
+    release_date: "2021"
 
   - format: digital
-    release date: "2022-01-02"
+    release_date: "2022-01-02"
 
 recording_location: loud-and-clear-studio
 
