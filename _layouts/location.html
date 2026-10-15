@@ -2,6 +2,21 @@
 layout: default
 ---
 
+{% comment %}
+  Breadcrumb navigation shows the current page's position in the archive.
+  The collection link provides a route back to the relevant index, while
+  aria-current identifies the current page for assistive technology.
+  Keep the collection URL and label consistent with the site's navigation.
+{% endcomment %}
+<nav aria-label="Breadcrumb">
+  <!-- Existing breadcrumb links and current-page markup go here. -->
+  <a href="{{ "/" | relative_url }}">Home</a>
+  /
+  <a href="{{ "/locations/" | relative_url }}">Releases</a>
+  /
+  <span aria-current="page">{{ page.title }}</span>
+</nav>
+
 <article class="location">
   <header>
     <h1>{{ page.name }}</h1>
@@ -18,6 +33,10 @@ layout: default
     {% endif %}
   </header>
 
+  {% comment %}
+    Location documents list their operators.  Resolve each Person slug
+    to a Person document so the relationship is navigable.
+  {% endcomment %}
   {% if page.operators %}
     <section>
       <h2>Operators</h2>
@@ -40,6 +59,11 @@ layout: default
     </section>
   {% endif %}
 
+  {% comment %}
+    Releases identify their recording_location.  Derive this inverse
+    relationship from Releases instead of maintaining a second list
+    of recordings on the Location document.
+  {% endcomment %}
   {% assign recordings = site.releases | where: "recording_location", page.slug %}
 
   {% if recordings.size > 0 %}

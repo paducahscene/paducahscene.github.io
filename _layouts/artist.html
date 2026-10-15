@@ -2,15 +2,40 @@
 layout: default
 ---
 
+{% comment %}
+  Breadcrumb navigation shows the current page's position in the archive.
+  The collection link provides a route back to the relevant index, while
+  aria-current identifies the current page for assistive technology.
+  Keep the collection URL and label consistent with the site's navigation.
+{% endcomment %}
+<nav aria-label="Breadcrumb">
+  <!-- Existing breadcrumb links and current-page markup go here. -->
+  <a href="{{ "/" | relative_url }}">Home</a>
+  /
+  <a href="{{ "/artists/" | relative_url }}">Releases</a>
+  /
+  <span aria-current="page">{{ page.title }}</span>
+</nav>
+
 <article class="artist">
   <header>
     <h1>{{ page.name }}</h1>
 
+    {% comment %}
+      The artist's location is an optional slug reference to a Location 
+      document.  This field currently displays the stored value; resolving
+      it to a linked Location page can be added if desired.
+    {% endcomment %}
     {% if page.location %}
       <p><strong>Location:</strong> {{ page.location }}</p>
     {% endif %}
   </header>
 
+  {% comment %}
+    Memberships are stored on the Artist record because roles such as
+    guitar and vocals describe a person's participation in this artist,
+    not necessarily that person's general identity.
+  {% endcomment %}
   {% if page.members %}
     <section>
       <h2>Members</h2>
@@ -35,6 +60,10 @@ layout: default
     </section>
   {% endif %}
 
+  {% comment %}
+    Releases point to their Artist, so derive this list from Releases.
+    This avoids maintaining the same relationship in both collections.
+  {% endcomment %}
   {% assign artist_releases = site.releases | where: "artist", page.slug %}
 
   {% if artist_releases.size > 0 %}

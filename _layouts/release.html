@@ -2,10 +2,29 @@
 layout: default
 ---
 
+{% comment %}
+  Breadcrumb navigation shows the current page's position in the archive.
+  The collection link provides a route back to the relevant index, while
+  aria-current identifies the current page for assistive technology.
+  Keep the collection URL and label consistent with the site's navigation.
+{% endcomment %}
+<nav aria-label="Breadcrumb">
+  <!-- Existing breadcrumb links and current-page markup go here. -->
+  <a href="{{ "/" | relative_url }}">Home</a>
+  /
+  <a href="{{ "/releases/" | relative_url }}">Releases</a>
+  /
+  <span aria-current="page">{{ page.title }}</span>
+</nav>
+
 <article class="release">
   <header>
     <h1>{{ page.title }}</h1>
 
+    {% comment %}
+      Resolve relationship slugs to collection documents so visitors can
+      navigate directly to the related Artist and Location records.
+    {% endcomment %}
     {% if page.artist %}
       {% assign artist = site.artists | where: "slug", page.artist | first %}
 
@@ -29,6 +48,11 @@ layout: default
     {% endif %}
   </header>
 
+  {% comment %}
+    Edition-specific dates and formats belong to the Release-Edition
+    relationship data.  Keep editions together here until the archive
+    requires separate Release Edition documents.
+  {% endcomment %}
   {% if page.editions %}
     <section>
       <h2>Release Information</h2>
@@ -53,6 +77,11 @@ layout: default
     </section>
   {% endif %}
 
+  {% comment %}
+    Each track-list entry stores a Track slug and its position within
+    this Release. Iterate in front-matter order; do not sort by Track
+    title, because position is a property of this relationship.
+  {% endcomment %}
   {% if page.tracks %}
     <section>
       <h2>Tracks</h2>
@@ -79,6 +108,11 @@ layout: default
     </section>
   {% endif %}
 
+  {% comment %}
+    Credits are stored on the Release.  A credit may apply to all tracks
+    or only to the tracks listed in credit.tracks. Roles and credited
+    names describe this contribution, not permanent Person attributes.
+  {% endcomment %}
   {% if page.credits %}
     <section>
       <h2>Personnel</h2>
@@ -104,6 +138,11 @@ layout: default
               — {{ credit.roles | join: ", " }}
             {% endif %}
 
+            {% comment %}
+              Track-specific credits link to the relevant Track records.
+              If a referenced Track is missing, it is currently omitted
+              here; keep references valid when editing the source data.
+            {% endcomment %}
             {% if credit.tracks %}
               — tracks:
               {% for track_slug in credit.tracks %}

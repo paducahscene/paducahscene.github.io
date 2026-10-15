@@ -2,6 +2,21 @@
 layout: default
 ---
 
+{% comment %}
+  Breadcrumb navigation shows the current page's position in the archive.
+  The collection link provides a route back to the relevant index, while
+  aria-current identifies the current page for assistive technology.
+  Keep the collection URL and label consistent with the site's navigation.
+{% endcomment %}
+<nav aria-label="Breadcrumb">
+  <!-- Existing breadcrumb links and current-page markup go here. -->
+  <a href="{{ "/" | relative_url }}">Home</a>
+  /
+  <a href="{{ "/tracks/" | relative_url }}">Releases</a>
+  /
+  <span aria-current="page">{{ page.title }}</span>
+</nav>
+
 <article class="track">
   <header>
     <h1>{{ page.title }}</h1>
@@ -11,6 +26,10 @@ layout: default
     {% endif %}
   </header>
 
+  {% comment %}
+    Release documents define track-list membership and position. Search
+    those lists to derive the inverse "Appears On" relationship here.
+  {% endcomment %}
   {% assign appearances = "" | split: "" %}
 
   {% for release in site.releases %}

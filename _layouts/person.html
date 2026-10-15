@@ -2,6 +2,21 @@
 layout: default
 ---
 
+{% comment %}
+  Breadcrumb navigation shows the current page's position in the archive.
+  The collection link provides a route back to the relevant index, while
+  aria-current identifies the current page for assistive technology.
+  Keep the collection URL and label consistent with the site's navigation.
+{% endcomment %}
+<nav aria-label="Breadcrumb">
+  <!-- Existing breadcrumb links and current-page markup go here. -->
+  <a href="{{ "/" | relative_url }}">Home</a>
+  /
+  <a href="{{ "/people/" | relative_url }}">Releases</a>
+  /
+  <span aria-current="page">{{ page.title }}</span>
+</nav>
+
 <article class="person">
   <header>
     <h1>{{ page.name }}</h1>
@@ -14,6 +29,11 @@ layout: default
     {% endif %}
   </header>
 
+  {% comment %}
+    Memberships are stored on Artist documents.  Scan those records to
+    build this Person's inverse membership list without duplicate data.
+    The temporary array starts empty and collects matching Artists.
+  {% endcomment %}
   {% assign memberships = "" | split: "" %}
 
   {% for artist in site.artists %}
@@ -40,6 +60,11 @@ layout: default
     </section>
   {% endif %}
 
+  {% comment %}
+    Release documents are the source of truth for credits. Scanning them
+    lets this page show the Person's credits without maintaining a second
+    list on the Person record.
+  {% endcomment %}
   {% assign credits = "" | split: "" %}
 
   {% for release in site.releases %}
